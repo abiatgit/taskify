@@ -7,12 +7,14 @@ const isPublicRoute = createRouteMatcher([
   '/sign-in(.*)',
   '/sign-up(.*)',
   "/",
+  "/marketing"
 ])
 
 export default clerkMiddleware(async (auth, request) => {
+  console.log("request URL",request.url)
   const{ userId,orgId} =  await auth()
   const currentUrl=new URL(request.url)
-  console.log("currentURL",currentUrl.pathname)
+  console.log("CurrentURL_request URL",currentUrl)
 
   if(userId && isPublicRoute(request)){
     let path = '/select-org'
@@ -24,12 +26,12 @@ export default clerkMiddleware(async (auth, request) => {
   }
 if(!userId && !isPublicRoute(request)){
   const signInUrl = new URL('/sign-in', request.url);
-  signInUrl.searchParams.set('returnBackUrl', request.url);
+  signInUrl.searchParams.set('returnBackUrl',request.url);
   return NextResponse.redirect(signInUrl); 
 }
 
 
-  if(userId && !orgId && currentUrl.pathname !=='/select-org'){
+  if(userId && ! orgId && currentUrl.pathname !=='/select-org'){
     const orgSelection=new URL('/select-org',currentUrl.origin)
     return NextResponse.redirect(orgSelection)
 

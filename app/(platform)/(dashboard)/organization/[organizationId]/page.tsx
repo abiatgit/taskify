@@ -1,10 +1,10 @@
-
-
 const Organization = async () => {
 
+ 
   return (
-    <div>
-        <h1>Organization</h1>
+    <div >
+     
+       <p>organization</p>
     </div>
   );
 };
