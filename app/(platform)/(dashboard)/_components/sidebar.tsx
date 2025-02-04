@@ -13,7 +13,7 @@ interface SidebarProps {
   storageKey?: string;
 }
 const Sidebar = ({ storageKey = "t-sidebar-state" }: SidebarProps) => {
-  const [expanded, setExpanded] = useLocalStorage<Record<string, boolean>>(
+  const [expanded, setExpanded] = useLocalStorage<Record<string,boolean>>(
     storageKey,
     {}
   );

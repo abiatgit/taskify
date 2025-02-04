@@ -51,6 +51,7 @@ const NavItem = ({
       icons: <CreditCard className="h-4 w-4 mr-2" />,
       href: `/organization/${organization.id}/billing`,
     },
+  
   ];
 
   const onClick = (href: string) => {
@@ -61,16 +62,16 @@ const NavItem = ({
       <AccordionTrigger
         onClick={() => onExpand(organization.id)}
         className={cn(
-          "flex items-center gap-x-2 p-1.5 text-neutral-700 rounded-md hover:bg-neutral-500/10 transition text-start no-underline hover:no-underline",
+          "flex w-full items-center gap-x-2 p-1.5 text-neutral-700 rounded-md hover:bg-neutral-500/10 transition text-start no-underline hover:no-underline",
           isActive && !isExpanded && "bg-sky-500/10 text-sky-700"
         )}
       >
-        <div className="flex items-center gap-x-2 ">
+        <div className="flex items-center gap-x-2">
           <div className="w-7 h-7 relative">
             <Image
               alt="org"
               src={organization.imageUrl}
-              className="rounded-sm object-cover"
+              className="rounded-sm object-cover "
               width={200}
               height={200}
             ></Image>
