@@ -2,18 +2,18 @@
 import Link from "next/link";
 import { Plus } from "lucide-react";
 import { useLocalStorage } from "usehooks-ts";
-import NavItem from "./nav-item";
+import { NavItem } from "./nav-item";
 // import { Separator } from "@/components/ui/separator";
 import { useOrganization, useOrganizationList } from "@clerk/nextjs";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Accordion } from "@/components/ui/accordion";
-import {Organization} from "./nav-item"
+import { Organization } from "./nav-item";
 interface SidebarProps {
   storageKey?: string;
 }
 const Sidebar = ({ storageKey = "t-sidebar-state" }: SidebarProps) => {
-  const [expanded, setExpanded] = useLocalStorage<Record<string,boolean>>(
+  const [expanded, setExpanded] = useLocalStorage<Record<string, boolean>>(
     storageKey,
     {}
   );
@@ -44,9 +44,17 @@ const Sidebar = ({ storageKey = "t-sidebar-state" }: SidebarProps) => {
   };
   if (!isLoadedOrg || !isLoadedOrgList || userMemberships.isLoading) {
     return (
-      <div>
-        <Skeleton></Skeleton>
-      </div>
+      <>
+        <div className="flex items-center justify-between mb-2">
+          <Skeleton className="h-10 w-[50%]" />
+          <Skeleton className="h-10 w-10" />
+        </div>
+        <div className="space-y-2">
+          <NavItem.Skeleton />
+          <NavItem.Skeleton />
+          <NavItem.Skeleton />
+        </div>
+      </>
     );
   }
   return (
@@ -70,7 +78,7 @@ const Sidebar = ({ storageKey = "t-sidebar-state" }: SidebarProps) => {
           <NavItem
             key={organization.id}
             isActive={activeOrganization?.id === organization?.id}
-            isExpanded={expanded[organization.id]} 
+            isExpanded={expanded[organization.id]}
             organization={organization as Organization}
             onExpand={onExpand}
           />

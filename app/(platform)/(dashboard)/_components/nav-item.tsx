@@ -7,6 +7,7 @@ import Image from "next/image";
 import { Activity, CreditCard, Layout, Settings } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export type Organization = {
   id: string;
@@ -22,7 +23,7 @@ interface NavItemProps {
   onExpand: (id: string) => void;
 }
 
-const NavItem = ({
+export const NavItem = ({
   isExpanded,
   isActive,
   organization,
@@ -51,7 +52,6 @@ const NavItem = ({
       icons: <CreditCard className="h-4 w-4 mr-2" />,
       href: `/organization/${organization.id}/billing`,
     },
-  
   ];
 
   const onClick = (href: string) => {
@@ -101,5 +101,15 @@ const NavItem = ({
     </AccordionItem>
   );
 };
+NavItem.Skeleton = function SkeletonNavItem() {
+  return (
+    <div className="flex items-center  gap-x-2 ">
+      <div className="w-10 h-10 relative shrink-0 ">
+        <Skeleton className="h-full w-full absolute" />
+      </div>
 
-export default NavItem;
+        <Skeleton className="h-10 w-[150px]" />
+
+    </div>
+  );
+};
