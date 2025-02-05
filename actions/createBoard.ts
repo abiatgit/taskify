@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 const CreateBoard = z.object({
   title: z
     .string()
-    .min(3, { message: "Minimum Length of 3 letters is required" }),
+    .min(3, { message: "Minimum Length of 3 Letters Is ``Required" }),
 });
 
 export type State = {
