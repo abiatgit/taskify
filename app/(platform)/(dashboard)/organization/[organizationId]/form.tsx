@@ -21,7 +21,7 @@ export const Form = () => {
 
   return (
     <form onSubmit={(e) => {
-      e.preventDefault(); // Prevents default form submission
+      e.preventDefault(); 
       const formData = new FormData(e.currentTarget);
       onSubmit(formData);
     }}>
