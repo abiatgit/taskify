@@ -1,5 +1,6 @@
 import { HelpCircle, User2 } from "lucide-react";
 import { Hint } from "@/components/hint";
+import { FormPopoverProps } from "@/components/form/form-popover";
 export const BoardList = () => {
   return (
     <div className="space-y-4">
@@ -8,11 +9,12 @@ export const BoardList = () => {
         Your Board
       </div>
       <div className="grid grid-col-2 sm:grid-cols-3 lg:grid-col-4 gap-4">
+         <FormPopoverProps align="center" sideOffset={10} side="right">
         <div
           role="button"
           className="aspect-video relative h-full w-full bg-muted rounded-sm flex flex-col items-center justify-center hover:opacity-75 transition"
         >
-          <p className="text-sm ">Create new boare</p>
+          <p className="text-sm ">Create new board</p>
           <span className="text-xs">5 Remaining</span>
           <Hint
             sideOffset={40}
@@ -21,6 +23,7 @@ export const BoardList = () => {
             <HelpCircle className="absolute bottom-2 right-2 h-[14px] w-[14px]" />
           </Hint>
         </div>
+        </FormPopoverProps>
       </div>
     </div>
   );

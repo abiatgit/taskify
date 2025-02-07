@@ -3,7 +3,7 @@
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
-import { CreateBoard } from "./schema";
+import { createBoard } from "./schema";
 import { InputType, ReturnType } from "./type";
 import { createSafeAction } from "@/lib/create-safe-action";
 
@@ -18,20 +18,22 @@ export const handler = async (data: InputType): Promise<ReturnType> => {
   const { title } = data;
   let board;
   try {
-
+// throw new Error("Stimulating an error")
+// Simulating an error
     board = await db.board.create({
       data: {
         title,
       },
     });
+
   } catch (error) {
-    console.log(error);
+    console.error("An error occurred:", error);
     return {
-      error: "Failed to create",
+      error: "Failed to create board",
     };
   }
   revalidatePath(`/board/${board.id}`);
   return { data: board };
 };
 
-export const createBoard = createSafeAction(CreateBoard, handler);
+export const CreateBoard = createSafeAction(createBoard, handler);
