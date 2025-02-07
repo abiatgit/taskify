@@ -1,4 +1,5 @@
 "use client";
+
 import {
   Popover,
   PopoverTrigger,
@@ -13,6 +14,7 @@ import { Button } from "../ui/button";
 import { X } from "lucide-react";
 import { CreateBoard } from "@/actions/create-board";
 import { toast } from "sonner";
+import { FormPicker } from "./form-picker";
 
 interface FormPopoverProps {
   children: React.ReactNode;
@@ -71,6 +73,7 @@ export const FormPopoverProps = ({
 
         <form action={onSubmit} className="space-y-4">
           <div className="space-y-4">
+            <FormPicker id="image" errors={fieldErrors}></FormPicker>
             <FormInput
               id="title"
               label="Board title"
