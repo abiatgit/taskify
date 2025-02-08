@@ -15,6 +15,9 @@ import { X } from "lucide-react";
 import { CreateBoard } from "@/actions/create-board";
 import { toast } from "sonner";
 import { FormPicker } from "./form-picker";
+import { ElementRef, useRef } from "react";
+import { useRouter } from "next/navigation";
+
 
 interface FormPopoverProps {
   children: React.ReactNode;
@@ -28,26 +31,27 @@ export const FormPopoverProps = ({
   align,
   sideOffset = 0,
 }: FormPopoverProps) => {
-  const { execute, fieldErrors } = UseAction(CreateBoard, {
+  const router=useRouter()
+  const closeRef = useRef<ElementRef<"button">>(null);
+  console.log("closeRef",closeRef)
 
+  const { execute, fieldErrors } = UseAction(CreateBoard, {
     onSuccess: (result) => {
-    
-        console.log("Board created:", result);
-        toast.success("Board Created now");
-      }
-    ,
+      console.log("Board created:", result);
+      toast.success("Board Created now");
+      closeRef.current?.click()
+      router.push(`/board/${result.id}`)
+    },
     onError: (error) => {
       console.log("Unexpected error in UseAction:", error);
       toast.error("An unexpected error occurred");
     },
   });
-  
 
   const onSubmit = async (formData: FormData) => {
     const title = formData.get("title") as string;
-   
-      await execute({ title });
-  
+    const image = formData.get("image") as string;
+    await execute({ title, image });
   };
 
   return (
@@ -62,7 +66,7 @@ export const FormPopoverProps = ({
         <div className="text-sm font-medium text-center text-neutral-600 pb-4">
           Create Board
         </div>
-        <PopoverClose asChild>
+        <PopoverClose ref={closeRef} asChild>
           <Button
             className="h-auto w-auto p-2 absolute top-2 right-2 text-neutral-600"
             variant="ghost"
