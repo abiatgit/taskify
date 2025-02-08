@@ -5,6 +5,8 @@ import { Loader2 } from "lucide-react";
 import { useFormStatus } from "react-dom";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { defaultImages } from "@/constants/images";
+import Link from "next/link";
 
 interface FormPickerProps {
   id: string;
@@ -16,11 +18,13 @@ interface UnsplashImage {
   urls: {
     thumb: string;
   };
+  user: { name: string };
+  links: { html: string };
 }
 
 export const FormPicker = ({ id, errors }: FormPickerProps) => {
   const { pending } = useFormStatus();
-  const [images, setImages] = useState<UnsplashImage[]>([]);
+  const [images, setImages] = useState<UnsplashImage[]>(defaultImages);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedImageId, setSelectedImageId] = useState<string | null>(null);
 
@@ -39,7 +43,7 @@ export const FormPicker = ({ id, errors }: FormPickerProps) => {
         }
       } catch (error) {
         console.log(error);
-        setImages([]);
+        setImages(defaultImages);
       } finally {
         setIsLoading(false);
       }
@@ -73,19 +77,24 @@ export const FormPicker = ({ id, errors }: FormPickerProps) => {
               className="object-cover rounded-sm"
               fill
             />
+            <Link
+              href={image.links.html}
+              target="_blank"
+              className="opacity-0 group-hover:opacity-100 absolute bottom-0 w-full text-[10px]
+               truncate text-white hover:underline p-1 bg-black/50"
+            >
+              {image.user.name}
+            </Link>
           </div>
         ))}
       </div>
       <input type="hidden" name={id} value={selectedImageId || ""} />
       {errors?.[id] && (
-        <div className="text-red-500 text-sm mt-2">
-          {errors[id].join(", ")}
-        </div>
+        <div className="text-red-500 text-sm mt-2">{errors[id].join(", ")}</div>
       )}
     </div>
   );
 };
-
 
 // "use client";
 // import { useEffect, useState } from "react";
@@ -134,7 +143,6 @@ export const FormPicker = ({ id, errors }: FormPickerProps) => {
 //         <Loader2 className="h-6 w-6 text-sky-700 animate-spin" />
 //       </div>
 //     )
-  
 
 //   : (
 //     <div className=" relative ">
