@@ -1,7 +1,7 @@
 
 
-const BoardIdPage=()=>{
-
+const BoardIdPage= ()=>{
+    
     return(
         <div className="mt-20">
             Board Id
