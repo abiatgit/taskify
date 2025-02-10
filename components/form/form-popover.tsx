@@ -33,11 +33,11 @@ export const FormPopoverProps = ({
 }: FormPopoverProps) => {
   const router=useRouter()
   const closeRef = useRef<ElementRef<"button">>(null);
-  console.log("closeRef",closeRef)
+
 
   const { execute, fieldErrors } = UseAction(CreateBoard, {
     onSuccess: (result) => {
-      console.log("Board created:", result);
+  
       toast.success("Board Created now");
       closeRef.current?.click()
       router.push(`/board/${result.id}`)

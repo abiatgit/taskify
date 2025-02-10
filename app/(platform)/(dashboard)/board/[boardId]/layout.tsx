@@ -2,45 +2,49 @@ import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { notFound, redirect } from "next/navigation";
 import BoardNavbar from "./_components/board-nav-bar";
+import {startCase} from "lodash"
 
-import {startCase,} from "lodash"
-
-export async function generateMetadata({params}:{ params: { boardId: string }}) {
-     const {orgId}= await auth()
-     const {boardId}=params
-
-    if(!orgId){
-        return {title:"Board"}
-    }
-    const board = await db.board.findUnique({
-        where: {
-          id: boardId,
-          orgId,
-        },})
-    return{
-      title:startCase(board?.title || "organization")
-    }
-    
+export async function generateMetadata({ params }: { params: { boardId: string } }) {
+  const { orgId } = await auth();
+  const { boardId } = await params;
+  if (!orgId) {
+    return { title: "Board" };
   }
+
+  const board = await db.board.findUnique({
+    where: {
+      id:boardId,
+      orgId,
+    },
+  });
+
+  return {
+    title: startCase(board?.title || "Organization"),
+  };
+}
+
 
 const BoardIdLayout = async ({
   children,
   params,
 }: {
   children: React.ReactNode;
-  params: { boardId: string };
+  params:{ boardId: string };
 }) => {
   const { orgId } = await auth();
-  const { boardId } = params;
+  const { boardId } =await params;
+  
   if (!orgId) {
     redirect("/select-org");
   }
+
   const board = await db.board.findUnique({
     where: {
-      id: boardId,
+      id:boardId,
       orgId,
     },
   });
+
   if (!board) {
     notFound();
   }
