@@ -17,7 +17,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
   const { title, id } = data;
   let board;
   try {
-    console.log("Board",board)
+
     board = await db.board.update({
       where: {
         id,
@@ -36,7 +36,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
   revalidatePath(`/board/${id}`);
   return {
     success: true,
-    board,  // Assuming `board` should be part of the return type
+    data:board,  // Assuming `board` should be part of the return type
   } as ReturnType;
 
 };

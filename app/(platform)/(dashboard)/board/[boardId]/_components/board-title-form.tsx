@@ -12,17 +12,21 @@ interface BoardTitleProps {
   data: Board;
 }
 export const BoardTitleForm = ({ data }: BoardTitleProps) => {
-  const {execute}=UseAction(updataBoard,{
-    onSuccess:(data)=>{toast.success(`Board "${data.title}" Updated`)
-    setTitle(data.title)
-    disabledEditing()
-  },
-  onError:(error)=>{toast.error(error)}
-  })
+  const { execute } = UseAction(updataBoard, {
+      onSuccess: (data) => {
+      console.log("onSuccess Triggered with:", data);
+      toast.success(`Board "${data.title}" Updated`);
+      setTitle(data.title);
+      disabledEditing();
+    },
+    onError: (error) => {
+      toast.error(error);
+    },
+  });
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const [title,setTitle]=useState(data?.title)
+  const [title, setTitle] = useState(data?.title);
 
   const [isEditing, setIsEditing] = useState(false);
   const enableEditing = () => {
@@ -36,23 +40,27 @@ export const BoardTitleForm = ({ data }: BoardTitleProps) => {
     setIsEditing(false);
   };
 
-  const onSubmit = (formData: FormData) => {
-  
+  const onSubmit = async (event:React.FormEvent) => {
+    event.preventDefault();
+    const formData = new FormData(formRef.current!);
     const title = formData.get("title") as string;
-    setTitle(title)
- 
-    execute({title,id:data.id})
+    setTitle(title);
+    try {
+      const result = await execute({ title, id: data.id }); // ✅ Await to resolve the promise
+      console.log("Execute Resolved Result:", result); // This will log the final result
+    } catch (error) {
+      console.error("Error executing action:", error);
+    }
   };
-  const onBlur=()=>{
-    formRef.current?.requestSubmit()
-  }
+  const onBlur = () => {
+    formRef.current?.requestSubmit();
+  };
   if (isEditing) {
     return (
       <form
-        action={onSubmit}
+        onSubmit={onSubmit}
         ref={formRef}
         className="flex items-center gap-x-2"
-
       >
         <FormInput
           ref={inputRef}
