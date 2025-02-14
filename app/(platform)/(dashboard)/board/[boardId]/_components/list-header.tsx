@@ -5,6 +5,7 @@ import { useState, useRef } from "react";
 import { useEventListener } from "usehooks-ts";
 import { updataList } from "@/actions/update-list";
 import { toast } from "sonner";
+import ListOptions from "./list-options";
 interface ListHeaderProps {
   data: List;
 }
@@ -90,6 +91,7 @@ const ListHeader = ({ data }: ListHeaderProps) => {
           {title}
         </div>
       )}
+      <ListOptions data={data} onAddCard={()=>{}}></ListOptions>
     </div>
   );
 };
