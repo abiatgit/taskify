@@ -5,7 +5,7 @@ import { InputType, ReturnType } from "./type";
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { createSafeAction } from "@/lib/create-safe-action";
-import { UpdateBoard } from "./schema";
+import { UpdateList } from "./schema";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
   const { userId, orgId } = await auth();
@@ -14,14 +14,17 @@ const handler = async (data: InputType): Promise<ReturnType> => {
       error: "Unauthorized",
     };
   }
-  const { title, id } = data;
-  let board;
+  const { title, id,boardId } = data;
+  let list;
   try {
 
-    board = await db.board.update({
+    list = await db.list.update({
       where: {
         id,
-        orgId,
+        boardId:boardId,
+        board:{
+          orgId
+        }
       },
       data: {
         title,
@@ -33,11 +36,11 @@ const handler = async (data: InputType): Promise<ReturnType> => {
       error: "Failed to update",
     };
   }
-  revalidatePath(`/board/${id}`);
+  revalidatePath(`/board/${boardId}`);
   return {
     success: true,
-    data:board,  // Assuming `board` should be part of the return type
+    data:list,  // Assuming `board` should be part of the return type
   } as ReturnType;
 
 };
-export const updataBoard = createSafeAction(UpdateBoard, handler);
+export const updataList = createSafeAction(UpdateList , handler);
