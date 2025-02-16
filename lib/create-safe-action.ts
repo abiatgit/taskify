@@ -1,3 +1,4 @@
+
 import { z } from "zod";
 
 export type fieldErrors<T> = {
@@ -15,6 +16,7 @@ export const createSafeAction = <TInput, TOutput>(
   return async (data: TInput): Promise<ActionState<TInput, TOutput>> => {
     const validationResult = schema.safeParse(data);
     if (!validationResult.success) {
+  
       return {
         fieldErrors: validationResult.error.flatten()
           .fieldErrors as fieldErrors<TInput>,

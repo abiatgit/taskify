@@ -28,7 +28,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
       },
     });
   } catch (error) {
-    console.log(error)
+    console.log("Abi",error)
     return {
       error: "Failed to update",
     };
@@ -40,4 +40,4 @@ const handler = async (data: InputType): Promise<ReturnType> => {
   } as ReturnType;
 
 };
-export const updataBoard = createSafeAction(UpdateBoard, handler);
+export const updataBoard = createSafeAction(UpdateBoard, handler);// Passing zod validation adn handler funciton 

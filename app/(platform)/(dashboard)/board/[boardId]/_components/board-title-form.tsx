@@ -14,12 +14,12 @@ interface BoardTitleProps {
 export const BoardTitleForm = ({ data }: BoardTitleProps) => {
   const { execute } = UseAction(updataBoard, {
       onSuccess: (data) => {
-      console.log("onSuccess Triggered with:", data);
-      toast.success(`Board "${data.title}" Updated`);
+      toast.success(`Board "${data.title}" Updated Success`);
       setTitle(data.title);
       disabledEditing();
     },
     onError: (error) => {
+      
       toast.error(error);
     },
   });
@@ -46,8 +46,8 @@ export const BoardTitleForm = ({ data }: BoardTitleProps) => {
     const title = formData.get("title") as string;
     setTitle(title);
     try {
-      const result = await execute({ title, id: data.id }); // ✅ Await to resolve the promise
-      console.log("Execute Resolved Result:", result); // This will log the final result
+      const result = await execute({ title, id: data.id }); 
+      console.log("Execute Resolved Result:", result); 
     } catch (error) {
       console.error("Error executing action:", error);
     }

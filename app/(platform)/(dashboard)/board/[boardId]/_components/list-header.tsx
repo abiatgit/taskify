@@ -8,9 +8,10 @@ import { toast } from "sonner";
 import ListOptions from "./list-options";
 interface ListHeaderProps {
   data: List;
+  onAddCard:()=>void
 }
 
-const ListHeader = ({ data }: ListHeaderProps) => {
+const ListHeader = ({ data ,onAddCard}: ListHeaderProps) => {
   const [title, setTitle] = useState(data.title);
   const [isEditing, setIsEditing] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
@@ -91,7 +92,7 @@ const ListHeader = ({ data }: ListHeaderProps) => {
           {title}
         </div>
       )}
-      <ListOptions data={data} onAddCard={()=>{}}></ListOptions>
+      <ListOptions data={data} onAddCard={onAddCard}></ListOptions>
     </div>
   );
 };
