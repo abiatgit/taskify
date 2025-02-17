@@ -1,9 +1,12 @@
 "use client";
 import { useState, useEffect } from "react";
+import { UseAction } from "@/hooks/use-action";
+import { updateListOrder } from "@/actions/update-list-order ";
 import { ListItem } from "./list-item";
 import { ListWtihCard } from "@/types";
 import ListForm from "./list-form";
-import { DragDropContext, Droppable,DropResult } from "@hello-pangea/dnd";
+import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
+import { toast } from "sonner";
 
 interface ListContainerProp {
   data: ListWtihCard[];
@@ -19,12 +22,20 @@ export const ListContainer = ({ data, boardId }: ListContainerProp) => {
   console.log(boardId);
   const [orderedData, setOrderdData] = useState(data);
 
+  const { execute: executeUpdateOrder } = UseAction(updateListOrder, {
+    onSuccess: () => {
+      toast.success("List reordered");
+    },
+    onError: (error) => {
+      toast.error(error);
+    },
+  });
+
   useEffect(() => {
     setOrderdData(data);
   }, [data]);
 
-  const onDragEnd = (result:DropResult ) => {
-
+  const onDragEnd = (result: DropResult) => {
     const { destination, source, type } = result;
     if (!destination) {
       return;
@@ -40,12 +51,11 @@ export const ListContainer = ({ data, boardId }: ListContainerProp) => {
     //User moves a list
 
     if (type === "list") {
-     setOrderdData((prev) => {
-        const items = reorder(prev, source.index, destination.index).map(
-          (item, index) => ({ ...item, order: index })
-        );
-        return items;
-      });
+      const items = reorder(orderedData, source.index, destination.index).map(
+        (item, index) => ({ ...item, order: index })
+      );
+      executeUpdateOrder({ items, boardId });
+
       // TODO :Triger Server Action
     }
     //user moves a card
@@ -61,16 +71,20 @@ export const ListContainer = ({ data, boardId }: ListContainerProp) => {
         (list) => list.id === destination.droppableId
       );
 
-      if (!sourceList || !destList) return orderedData
+      if (!sourceList || !destList) return orderedData;
       // Check if cards exists on the sourcelist
       if (!sourceList.cards) sourceList.cards = [];
-      
+
       // Check if cards exists on the destList
       if (!destList.cards) destList.cards = [];
-      
+
       // Moving the card in the same list
-      if (source.droppableId === destination.droppableId ) {
-        sourceList.cards = reorder(sourceList.cards, source.index, destination.index);
+      if (source.droppableId === destination.droppableId) {
+        sourceList.cards = reorder(
+          sourceList.cards,
+          source.index,
+          destination.index
+        );
         sourceList.cards.forEach((card, idx) => (card.order = idx));
         // TODO :Triger Server Action
         //User moves the card to another list
@@ -95,9 +109,13 @@ export const ListContainer = ({ data, boardId }: ListContainerProp) => {
       }
     }
   };
-  {console.log("ordeerddata",orderedData.map((item) => item.id)); }
+  {
+    console.log(
+      "ordeerddata",
+      orderedData.map((item) => item.id)
+    );
+  }
   return (
-    
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="lists" type="list" direction="horizontal">
         {(provided) => (
