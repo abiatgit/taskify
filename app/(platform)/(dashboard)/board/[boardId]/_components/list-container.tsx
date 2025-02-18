@@ -7,6 +7,7 @@ import { ListWtihCard } from "@/types";
 import ListForm from "./list-form";
 import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
 import { toast } from "sonner";
+import { updateCardOrder } from "@/actions/update-card-order ";
 
 interface ListContainerProp {
   data: ListWtihCard[];
@@ -30,6 +31,17 @@ export const ListContainer = ({ data, boardId }: ListContainerProp) => {
       toast.error(error);
     },
   });
+
+  const { execute: executeUpdateCardOrder } = UseAction(updateCardOrder, {
+    onSuccess: () => {
+      toast.success("Card reordered");
+    },
+    onError: (error) => {
+      toast.error(error);
+    },
+  });
+
+
 
   useEffect(() => {
     setOrderdData(data);
@@ -80,12 +92,15 @@ export const ListContainer = ({ data, boardId }: ListContainerProp) => {
 
       // Moving the card in the same list
       if (source.droppableId === destination.droppableId) {
-        sourceList.cards = reorder(
+        const reorderedCards= reorder(
           sourceList.cards,
           source.index,
           destination.index
         );
-        sourceList.cards.forEach((card, idx) => (card.order = idx));
+        reorderedCards.forEach((card, idx) => (card.order = idx));
+        sourceList.cards=reorderedCards;
+        setOrderdData(newOrderedData)
+        executeUpdateCardOrder({boardId:boardId,items:reorderedCards})
         // TODO :Triger Server Action
         //User moves the card to another list
       } else {
@@ -105,7 +120,10 @@ export const ListContainer = ({ data, boardId }: ListContainerProp) => {
         });
 
         setOrderdData(newOrderedData);
-        // TODO :Triger Server Action
+        executeUpdateCardOrder({
+          boardId:boardId,
+          items:destList.cards
+        })
       }
     }
   };
