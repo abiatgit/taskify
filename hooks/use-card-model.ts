@@ -1,5 +1,5 @@
+//use-card- model.ts
 import {create} from "zustand"
-
 
 interface CardModalStore{
     id?:string | undefined
