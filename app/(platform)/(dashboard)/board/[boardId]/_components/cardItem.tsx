@@ -16,6 +16,7 @@ export const CardItem=({data,index}:CardItemProps)=>{
     
     return (
         <Draggable draggableId={data.id} index={index}>
+            
             {(provided)=>
         <div 
         {...provided.dragHandleProps}
