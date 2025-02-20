@@ -8,6 +8,7 @@ import { createSafeAction } from "@/lib/create-safe-action";
 import { CreateCard } from "./schema";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
+ 
   const { userId, orgId } = await auth();
   if (!userId || !orgId) {
     return {
@@ -17,6 +18,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
   const { title,boardId,listId } = data;
   let card
   try {
+    console.log("hello abi you are a software engineer")
     const list=db.list.findUnique(
       {where:{
       id:listId,

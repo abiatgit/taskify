@@ -54,7 +54,7 @@ export const Description = ({ data }: DescriptionProps) => {
       onError: (err) => {
         toast.error(err);
       },
-    });
+    } );
 
     const onSubmit = (formData: FormData) => {
       const description = formData.get("description") as string;
