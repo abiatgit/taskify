@@ -5,25 +5,45 @@ import { Layout } from "lucide-react";
 import { useRef, useState } from "react";
 import { FormInput } from "@/components/form/form-input";
 import { Skeleton } from "@/components/ui/skeleton";
-// import { useParams } from "next/navigation";
-// import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 // import { useQuery } from "@tanstack/react-query";
-// import { useParams } from "next/navigation";
+import { useParams } from "next/navigation";
+import { UseAction } from "@/hooks/use-action";
+import { updateCard } from "@/actions/update-card/index";
+import { toast } from "sonner";
 
 interface HeaderProps {
   data: CardWithList;
 }
 export const Header = ({ data }: HeaderProps) => {
-  // const queryClient = useQueryClient();
-  // const params = useParams();
+  const [title, setTitle] = useState(data?.title);
+  const queryClient = useQueryClient();
+  const params = useParams();
   const inputRef = useRef<HTMLInputElement>(null);
-  const [title] = useState(data?.title);
+
+  const { execute } = UseAction(updateCard, {
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: ["card", data.id],
+      });
+      toast.success(`renamed to ${data.title}`);
+      setTitle(data.title);
+    },
+    onError:(error)=>{
+      toast.error(error)
+    }
+  });
+
   const onBlur = () => {
     inputRef.current?.form?.requestSubmit();
   };
-const onSubmit=(formData:FormData)=>{
-  console.log(formData.get("title"))
-}
+  const onSubmit = (formData: FormData) => {
+    const title = formData.get("title") as string;
+    const boardId = params.boardId as string;
+    if (title === data.title) return
+      execute({ title, boardId, id: data.id });
+  };
+
   return (
     <div className="flex items-start gap-x-3 mb-6 w-full">
       <Layout className="h-5 w-5 text-neutral-700 mt-1" />
