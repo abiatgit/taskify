@@ -68,7 +68,6 @@ export const ListContainer = ({ data, boardId }: ListContainerProp) => {
       );
       executeUpdateOrder({ items, boardId });
 
-      // TODO :Triger Server Action
     }
     //user moves a card
     if (type === "card") {
@@ -101,7 +100,7 @@ export const ListContainer = ({ data, boardId }: ListContainerProp) => {
         sourceList.cards=reorderedCards;
         setOrderdData(newOrderedData)
         executeUpdateCardOrder({boardId:boardId,items:reorderedCards})
-        // TODO :Triger Server Action
+       
         //User moves the card to another list
       } else {
         //Rmove Card form the source list

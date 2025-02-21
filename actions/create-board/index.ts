@@ -7,8 +7,8 @@ import { createBoard } from "./schema";
 import { InputType, ReturnType } from "./type";
 import { createSafeAction } from "@/lib/create-safe-action";
 import { createAuditLog } from "@/lib/create-audit-log";
-import { ENTITY_TYPE ,ACTION} from "@prisma/client";
-
+import { ENTITY_TYPE, ACTION } from "@prisma/client";
+import { incrementAvilabelCount,hasAvailabelCount } from "@/lib/org-limit";
 
 export const handler = async (data: InputType): Promise<ReturnType> => {
   const { userId, orgId } = await auth();
@@ -18,18 +18,22 @@ export const handler = async (data: InputType): Promise<ReturnType> => {
       error: "Unauthorized",
     };
   }
+  const canCreate = await hasAvailabelCount()
+  if(!canCreate){
+    return {
+      error:"you have reached your limit of free boards.Please upgrade to premium"
+    }
+  }
   const { title, image } = data;
-  const [imageId,
-         imageThumbUrl,
-         imageFullUrl,
-         imageLinkHTML,
-         imageUserName] =
-    image.split("|")
-    console.log({imageId,
-      imageThumbUrl,
-      imageFullUrl,
-      imageLinkHTML,
-      imageUserName})
+  const [imageId, imageThumbUrl, imageFullUrl, imageLinkHTML, imageUserName] =
+    image.split("|");
+  console.log({
+    imageId,
+    imageThumbUrl,
+    imageFullUrl,
+    imageLinkHTML,
+    imageUserName,
+  });
   if (
     !imageId ||
     !imageThumbUrl ||
@@ -56,7 +60,7 @@ export const handler = async (data: InputType): Promise<ReturnType> => {
         imageUserName,
       },
     });
-
+    await incrementAvilabelCount();
     await createAuditLog({
       entityTitle: board.title,
       entityId: board.id,

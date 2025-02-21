@@ -9,6 +9,7 @@ import { DeleteBoard } from "./schema";
 import { redirect } from "next/navigation";
 import { createAuditLog } from "@/lib/create-audit-log";
 import { ENTITY_TYPE,ACTION } from "@prisma/client";
+import { decreaseAvilabelCount } from "@/lib/org-limit";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
   const { userId, orgId } = await auth();
@@ -28,7 +29,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
       },
   
     });
-
+    await decreaseAvilabelCount()
     await createAuditLog ({
       entityId:board.id,
       entityTitle:board.title,
