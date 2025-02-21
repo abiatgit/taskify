@@ -9,6 +9,7 @@ import { CreateCard } from "./schema";
 import { createAuditLog } from "@/lib/create-audit-log";
 import { ACTION, ENTITY_TYPE } from "@prisma/client";
 
+
 const handler = async (data: InputType): Promise<ReturnType> => {
  
   const { userId, orgId } = await auth();
@@ -45,12 +46,14 @@ const handler = async (data: InputType): Promise<ReturnType> => {
           order:newOrder
         }
       })
-      await createAuditLog ({
-        entityId:card.id,
-        entityTitle:card.title,
-        entityType:ENTITY_TYPE.CARD,
-        action:ACTION.CREATE
-      })
+
+
+      await createAuditLog({
+        entityTitle: card.title,
+        entityId: card.id,
+        entityType: ENTITY_TYPE.CARD,
+        action: ACTION.CREATE,
+      });
   } catch (error) {
     console.log(error)
     return {

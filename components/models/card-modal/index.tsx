@@ -8,6 +8,8 @@ import { fetcher } from "@/lib/fetcher";
 import { Header } from "./header";
 import { Description } from "./description";
 import { Action } from "./actions";
+import { AuditLog } from "@prisma/client";
+import { Activiy } from "./activity";
 export const CardModal = () => {
   const id = useCardModal((state) => state.id);
   const isOpen = useCardModal((state) => state.isOpen);
@@ -16,7 +18,10 @@ export const CardModal = () => {
     queryKey: ["card", id],
     queryFn: () => fetcher(`/api/cards/${id}`),
   });
-  console.log("CardData", cardData);
+  const { data: auditLogData } = useQuery<AuditLog[]>({
+    queryKey: ["card-logs", id],
+    queryFn: () => fetcher(`/api/cards/${id}/logs`),
+  });
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -31,9 +36,15 @@ export const CardModal = () => {
                 ) : (
                   <Description data={cardData}></Description>
                 )}
+
+                {!auditLogData ? (
+                 <Activiy.Skelion/>
+                ) : (
+                  <Activiy items={auditLogData}/>
+                )}
               </div>
             </div>
-            {!cardData ? <Action.Skeleton/>: <Action data={cardData} />}
+            {!cardData ? <Action.Skeleton /> : <Action data={cardData} />}
           </div>
         </DialogTitle>
       </DialogContent>

@@ -6,6 +6,8 @@ import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { createSafeAction } from "@/lib/create-safe-action";
 import { CopyCard } from "./schema";
+import { createAuditLog } from "@/lib/create-audit-log";
+import { ACTION, ENTITY_TYPE } from "@prisma/client";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
   console.log("copy card abi")
@@ -47,6 +49,12 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         listId: cardTocopy.listId,
       },
     });
+    await createAuditLog({
+      entityTitle:card.title,
+      entityId:card.id,
+      entityType:ENTITY_TYPE.CARD,
+      action:ACTION.CREATE
+    })
   } catch (error) {
     console.log(error);
     return {
@@ -57,3 +65,5 @@ const handler = async (data: InputType): Promise<ReturnType> => {
   return { data: card };
 };
 export const copyCard = createSafeAction(CopyCard, handler);
+
+
