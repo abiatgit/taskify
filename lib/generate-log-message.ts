@@ -4,12 +4,12 @@ export const generateLogMessage=(log:AuditLog)=>{
     const {action,entityTitle,entityType}=log
     switch (action){
         case ACTION.CREATE:
-            return `created ${entityType.toLocaleLowerCase()} "${entityTitle}"`
+            return ` Created  ${entityType.toLocaleLowerCase()} "${entityTitle}"`
         case ACTION.DELETE:
-            return `deleted ${entityType.toLocaleLowerCase()} "${entityTitle}"`
+            return ` Deleted  ${entityType.toLocaleLowerCase()} "${entityTitle}"`
         case ACTION.UPDATE:
-            return `updated ${entityType.toLocaleLowerCase()} "${entityTitle}"`
+            return ` Updated  ${entityType.toLocaleLowerCase()} "${entityTitle}"`
       default:
-            return `Unknown action ${entityType.toLocaleLowerCase()} "${entityTitle}"`
+            return ` Unknown action  ${entityType.toLocaleLowerCase()} "${entityTitle}"`
     }
 }
