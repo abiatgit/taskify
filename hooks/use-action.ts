@@ -34,6 +34,7 @@ export const UseAction = <TInput, TOutput>(
 
         if (result.error) {
           setError(result.error);
+          option.onError?.(result.error)
         }
         if (result.data) {
           setData(result.data);

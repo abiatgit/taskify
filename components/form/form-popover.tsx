@@ -15,8 +15,9 @@ import { X } from "lucide-react";
 import { CreateBoard } from "@/actions/create-board";
 import { toast } from "sonner";
 import { FormPicker } from "./form-picker";
-import { ElementRef, useRef } from "react";
+import {  useRef } from "react";
 import { useRouter } from "next/navigation";
+import { useProModel } from "@/hooks/use-pro-model ";
 
 
 interface FormPopoverProps {
@@ -31,20 +32,21 @@ export const FormPopoverProps = ({
   align,
   sideOffset = 0,
 }: FormPopoverProps) => {
+  const proModel=useProModel()
   const router=useRouter()
-  const closeRef = useRef<ElementRef<"button">>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
 
 
   const { execute, fieldErrors } = UseAction(CreateBoard, {
     onSuccess: (result) => {
-  
       toast.success("Board Created now");
       closeRef.current?.click()
       router.push(`/board/${result.id}`)
     },
     onError: (error) => {
-      console.log("Unexpected error in UseAction:", error);
-      toast.error("An unexpected error occurred");
+      console.log("hello abi sukhano?")
+      toast.error(error);
+      proModel.onOpen()
     },
   });
 

@@ -2,6 +2,7 @@
 "use client"
 import {CardModal} from "@/components/models/card-modal"
 import { useEffect, useState } from "react"
+import { ProModel } from "../models/pro-model"
 export const ModelProvider=()=>{
  const [isMounted,setIsMounted]=useState(false)
  useEffect(()=>{
@@ -13,6 +14,7 @@ export const ModelProvider=()=>{
     return(
         <>
         <CardModal></CardModal>
+        <ProModel></ProModel>
         </>
     )
 }
