@@ -1,4 +1,4 @@
-import { OrganizationList } from "@clerk/nextjs/";
+import { OrganizationList } from "@clerk/nextjs";
 
 export default function CreateOrganization() {
   return (

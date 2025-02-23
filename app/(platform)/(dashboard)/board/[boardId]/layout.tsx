@@ -4,9 +4,13 @@ import { notFound, redirect } from "next/navigation";
 import BoardNavbar from "./_components/board-nav-bar";
 import {startCase} from "lodash"
 
-export async function generateMetadata({ params }: { params: { boardId: string } }) {
+export async function generateMetadata({
+  params,
+}: { params: Promise<{ boardId: string }> }){
   const { orgId } = await auth();
-  const { boardId } = await params;
+  const response = await params;
+  const   boardId =response.boardId
+
   if (!orgId) {
     return { title: "Board" };
   }
@@ -29,7 +33,7 @@ const BoardIdLayout = async ({
   params,
 }: {
   children: React.ReactNode;
-  params:{ boardId: string };
+  params: Promise<{ boardId: string }> 
 }) => {
   const { orgId } = await auth();
   const { boardId } =await params;
